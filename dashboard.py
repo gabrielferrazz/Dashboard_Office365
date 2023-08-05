@@ -10,13 +10,26 @@ tipos_licenca = df.columns[1:]
 centros_custo = df['Centro de Custo'].unique()
 
 # Cores para a página
-cor_de_fundo = '#F0F0F0'       # Cor de fundo mais clara
-cor_principal = '#3366CC'      # Azul
+cor_de_fundo = '#181818'       # Cor de fundo Cinza escuro
+cor_principal_amarelo = '#fca311'      # Amarelo
+cor_principal_branco = '#ffffff'      # Branco
 cor_secundaria = '#FFA500'     # Laranja
-cor_fonte = '#333333'          # Preto
+cor_fonte = '#ffffff'          # Branco
+cor_rodape = '#000000'         # Preto
 
 # Estilos CSS personalizados
 styles = {
+    'font-family': 'Arial, sans-serif',
+    'font-size': '20px',
+    'margin': '5px',
+    'padding': '10px',
+    'color': cor_rodape,
+    'border-radius': '10px',
+    'box-shadow': '0 4px 8px 0 rgba(0,0,0,0.2)',  # Adicionando sombra para destacar o dashboard
+}
+
+# Estilos CSS personalizados
+styles_resultados = {
     'font-family': 'Arial, sans-serif',
     'font-size': '20px',
     'margin': '5px',
@@ -26,12 +39,21 @@ styles = {
     'box-shadow': '0 4px 8px 0 rgba(0,0,0,0.2)',  # Adicionando sombra para destacar o dashboard
 }
 
-# Estilos CSS para o título
-titulo_styles = {
+# Estilos CSS para o título amarelo
+titulo_styles_amarelo = {
     'text-align': 'center',
     'font-size': '50px',
     'font-family': 'Arial, sans-serif',
-    'color': cor_principal,
+    'color': cor_principal_amarelo,
+    'margin-top': '30px',  # Adicionando espaço entre o título e os dropdowns
+}
+
+# Estilos CSS para o título branco
+titulo_styles_branco = {
+    'text-align': 'center',
+    'font-size': '50px',
+    'font-family': 'Arial, sans-serif',
+    'color': cor_principal_branco,
     'margin-top': '30px',  # Adicionando espaço entre o título e os dropdowns
 }
 
@@ -43,7 +65,7 @@ rodape_styles = {
     'transform': 'translateX(-50%)',
     'font-size': '18px',
     'font-family': 'Arial, sans-serif',
-    'color': cor_fonte,
+    'color': cor_rodape,
 }
 
 # Inicialização do aplicativo Dash
@@ -53,8 +75,15 @@ app = dash.Dash(__name__)
 app.layout = html.Div(
     style={'background-color': cor_de_fundo, 'min-height': '100vh'},
     children=[
-        html.H1("Dashboard de Licenças", style=titulo_styles),
-        
+        html.Div(
+            style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'},
+            children=[
+                html.H1("Gabe`s", style=titulo_styles_amarelo,),
+                html.H1(".", style=titulo_styles_amarelo,),
+                html.H1("Rate", style=titulo_styles_branco,),
+            ]
+        ),
+
         dcc.Dropdown(
             id='tipo-licenca-dropdown',
             options=[{'label': licenca, 'value': licenca} for licenca in tipos_licenca],
@@ -69,7 +98,17 @@ app.layout = html.Div(
             style=styles
         ),
 
-        html.Div(id='detalhes-licencas', style=styles)
+        html.Div(id='detalhes-licencas', style=styles),
+
+        html.Div(
+            style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center', 'margin-top': '60px'},
+            children=[
+                html.Button('TOTVS', id = 'TOTVS', n_clicks=0, style={'margin-right': '10px'}),
+                html.Button('OFFICE 365', id = 'OFFICE 365', n_clicks=0, style={'margin-left': '10px'})
+
+            ]
+        ),
+
     ]
 )
 
@@ -86,7 +125,7 @@ def update_table(tipo_licenca, centro_custo):
         return html.Table([
             html.Thead(html.Tr([html.Th("Centro de Custo"), html.Th("Quantidade Usada", style={'text-align': 'center'})])),
             html.Tbody(html.Tr([html.Td(centro_custo), html.Td(0, style={'text-align': 'center'})]))
-        ], style=styles)
+        ], style=styles_resultados)
 
     tabela = html.Table([
         html.Thead(
@@ -96,7 +135,7 @@ def update_table(tipo_licenca, centro_custo):
             html.Tr([html.Td(filtered_df.iloc[i]['Centro de Custo']), html.Td(filtered_df.iloc[i][tipo_licenca], style={'text-align': 'center'})]) 
             for i in range(filtered_df.shape[0])
         ])
-    ], style=styles)
+    ], style=styles_resultados)
 
     return tabela
 
