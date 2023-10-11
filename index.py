@@ -1,11 +1,21 @@
-# Pandas é uma biblioteca para manipulação e análise de dados.
-import pandas as pd
-import dash  # Dash é uma biblioteca que permite criar aplicativos web interativos e analíticos em Python
-# 'html'- módulo específico da biblioteca Dash, que fornece componentes HTML.
-from dash import html
-# 'dcc'- fornece componentes mais avançados e interativos, como gráficos interativos, botões, menus suspensos, caixas de seleção e muito mais.
-from dash import dcc
 from dash.dependencies import Input, Output
+from dash import dcc
+from dash import html
+import dash  # Dash é uma biblioteca que permite criar aplicativos web interativos e analíticos em Python
+import pandas as pd
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
+
+
+# Pandas é uma biblioteca para manipulação e análise de dados.
+# 'html'- módulo específico da biblioteca Dash, que fornece componentes HTML.
+# 'dcc'- fornece componentes mais avançados e interativos, como gráficos interativos, botões, menus suspensos, caixas de seleção e muito mais.
 
 # Leitura dos dados do arquivo Excel
 df = pd.read_excel('dados.xlsx')
